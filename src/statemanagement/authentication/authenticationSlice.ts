@@ -1,14 +1,17 @@
+import { LoginRequest } from "@/types/login.type";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface AuthenticationState {
   token: string | null;
   isAuthenticated: boolean | null;
+  loginError: boolean | null;
 }
 
 const initialState: AuthenticationState = {
   token: null,
   isAuthenticated: null,
+  loginError: null,
 };
 
 export const fetchToken = createAsyncThunk(
@@ -18,7 +21,6 @@ export const fetchToken = createAsyncThunk(
     if (token) {
       const response = await fetch(
         "https://" +
-          //@ts-ignore
           window.envUrl +
           "/api/v1/identification/query/authentication/refresh",
         {
@@ -28,6 +30,9 @@ export const fetchToken = createAsyncThunk(
           method: "POST",
         }
       );
+      if (response.status > 299) {
+        throw new Error("Request failed with " + response.status);
+      }
       const data = await response.json();
       token = data.token;
       window.sessionStorage.setItem("token", token!);
@@ -35,6 +40,32 @@ export const fetchToken = createAsyncThunk(
     } else {
       throw new Error("No token found in session storage");
     }
+  }
+);
+
+export const login = createAsyncThunk(
+  "authentication/login",
+  async ({ username, password }: LoginRequest) => {
+    const response = await fetch(
+      "https://" +
+        window.envUrl +
+        "/api/v1/identification/query/authentication/token",
+      {
+        method: "POST",
+
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      }
+    );
+    if (response.status > 299) {
+      throw new Error("Request failed with " + response.status);
+    }
+    const data = await response.json();
+    const token = data.token;
+    window.sessionStorage.setItem("token", token!);
+    return token;
   }
 );
 
@@ -53,7 +84,15 @@ export const counterSlice = createSlice({
     });
     builder.addCase(fetchToken.fulfilled, (state, action) => {
       state.token = action.payload;
-      // jwt token validation todo
+      state.isAuthenticated = true;
+    });
+    builder.addCase(login.rejected, (state) => {
+      state.token = null;
+      state.loginError = true;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.token = action.payload;
+      state.loginError = null;
       state.isAuthenticated = true;
     });
   },

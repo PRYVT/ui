@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useMemo } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "./components/theming/themeprovider";
@@ -9,9 +10,10 @@ import { useAppDispatch, useAppSelector } from "./statemanagement/store";
 
 function App() {
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector(
-    (state) => state.authentication.isAuthenticated
-  );
+  const { isAuthenticated, token } = useAppSelector((state) => ({
+    isAuthenticated: state.authentication.isAuthenticated,
+    token: state.authentication.token,
+  }));
   let navigate = useNavigate();
   const isLoading = useMemo(() => {
     if (isAuthenticated === false) {
@@ -22,20 +24,23 @@ function App() {
     }
     return false;
   }, [isAuthenticated, navigate]);
-  console.log(isLoading);
   useEffect(() => {
-    const callToken = () => {
-      setTimeout(() => {
-        console.log("fetching token");
-        dispatch(fetchToken()).then((res) => {
-          console.log(res);
-          callToken();
-        });
-      }, 1000);
-    };
     dispatch(fetchToken());
-    callToken();
-  }, []);
+    console.log(isAuthenticated);
+    if (isAuthenticated === true && token) {
+      const decodedToken = jwtDecode(token);
+
+      let expiry = (decodedToken.exp ?? 0) * 1000 - Date.now();
+      if (expiry < 0) {
+        navigate("/login");
+      }
+      expiry = expiry - 20000;
+      console.log(expiry);
+      setTimeout(() => {
+        dispatch(fetchToken());
+      }, expiry);
+    }
+  }, [isAuthenticated, token, dispatch]);
   return (
     <>
       <ThemeProvider defaultTheme="dark">
