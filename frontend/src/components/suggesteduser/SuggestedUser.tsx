@@ -24,7 +24,7 @@ export const SuggestedUser = ({ user }: { user: User }) => {
           <p className="text-sm text-gray-500">{user.id}</p>
         </div>
       </div>
-      <Button size="sm">Connect</Button>
+      <Button size="sm">Add Friend</Button>
     </li>
   );
 };
