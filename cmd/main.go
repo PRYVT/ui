@@ -26,8 +26,7 @@ func main() {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(modifiedContent))
 	}
 
-	router.GET("/", indexFunc)
-	router.GET("/index.html", indexFunc)
 	router.Static("/assets", "../dist/assets")
+	router.Use(indexFunc)
 	router.Run(":5518")
 }
