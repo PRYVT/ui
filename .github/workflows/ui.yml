@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: ./frontend/dist
+          path: ./dist
 
   build-and-publish:
     needs: build
