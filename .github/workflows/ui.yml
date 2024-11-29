@@ -53,6 +53,7 @@ jobs:
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development' || startsWith(github.ref, 'refs/tags/')
         uses: docker/build-push-action@v6
         with:
+          context: .
           file: "./Dockerfile"
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/pryvt_ui:${{ github.ref == 'refs/heads/master' && 'latest' || github.ref_name }}
@@ -60,5 +61,6 @@ jobs:
         if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/development' && !startsWith(github.ref, 'refs/tags/')
         uses: docker/build-push-action@v6
         with:
+          context: .
           file: "./Dockerfile"
           push: false
