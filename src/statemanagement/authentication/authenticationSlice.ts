@@ -3,12 +3,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export interface AuthenticationState {
   token: string | null;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean | null;
 }
 
 const initialState: AuthenticationState = {
   token: null,
-  isAuthenticated: false,
+  isAuthenticated: null,
 };
 
 export const fetchToken = createAsyncThunk(

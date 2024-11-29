@@ -1,5 +1,3 @@
-"'use client'";
-
 import { SuggestedUser } from "../suggesteduser/SuggestedUser";
 import { UserProfileEditPanel } from "../UserProfileEdit/UserProfileEdit";
 
