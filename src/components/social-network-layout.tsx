@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentCard } from "./contentcard/contentcard";
-import { SidePanel } from "./SidePanel/SidePanel";
+import { UserPanel } from "./users/usersPanel";
 
 export function SocialNetworkLayout() {
   return (
@@ -23,7 +23,7 @@ export function SocialNetworkLayout() {
           <ContentCard id={post} />
         ))}
       </div>
-      <SidePanel />
+      <UserPanel />
     </div>
   );
 }

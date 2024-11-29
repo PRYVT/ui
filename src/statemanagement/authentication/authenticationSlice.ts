@@ -52,7 +52,6 @@ export const login = createAsyncThunk(
         "/api/v1/identification/query/authentication/token",
       {
         method: "POST",
-
         body: JSON.stringify({
           username,
           password,
@@ -69,8 +68,8 @@ export const login = createAsyncThunk(
   }
 );
 
-export const counterSlice = createSlice({
-  name: "counter",
+export const authenticationSlice = createSlice({
+  name: "authentication",
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
@@ -99,6 +98,6 @@ export const counterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setToken } = counterSlice.actions;
+export const { setToken } = authenticationSlice.actions;
 
-export default counterSlice.reducer;
+export default authenticationSlice.reducer;
