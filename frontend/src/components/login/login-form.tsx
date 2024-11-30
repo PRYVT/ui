@@ -42,7 +42,7 @@ export function LoginForm({
   };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[350px] ">
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle>Login</CardTitle>
