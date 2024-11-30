@@ -60,7 +60,7 @@ export const addPost = createAsyncThunk(
 );
 
 export const usersSlice = createSlice({
-  name: "users",
+  name: "posts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -83,7 +83,7 @@ export const usersSlice = createSlice({
     });
     builder.addCase(addPost.fulfilled, (state, action) => {
       state.postSending = false;
-      state.posts.push(action.payload);
+      state.posts.unshift(action.payload);
     });
   },
 });
