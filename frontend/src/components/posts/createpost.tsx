@@ -9,12 +9,15 @@ import { useCallback, useState } from "react";
 let counterDrag = 0;
 export const CreatePost = ({
   upload,
+  isLoading,
 }: {
-  upload: (text: string, blob: string) => Promise<void>;
+  upload: (text?: string, imageBase64?: string) => void;
+  isLoading: boolean;
 }) => {
   const [selectedImage, setSelectedImage] = useState<Blob | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
+  const [postText, setPostText] = useState("");
 
   const handleFile = useCallback((file: File | null | undefined) => {
     if (file?.size && file.size > 1 * 1024 * 1024) {
@@ -28,7 +31,6 @@ export const CreatePost = ({
     }
     if (file && file.type.startsWith("image/")) {
       setSelectedImage(file);
-      blobToBase64(file);
     }
   }, []);
 
@@ -68,6 +70,36 @@ export const CreatePost = ({
     },
     []
   );
+  const onUpload = useCallback(() => {
+    if (isLoading) return;
+    if (!postText && !selectedImage) {
+      const toastRes = toast({
+        variant: "destructive",
+        description: "Please add text or an image to post",
+      });
+      setTimeout(toastRes.dismiss, 1000);
+      return;
+    }
+    if (selectedImage) {
+      blobToBase64(selectedImage).then((base64) => {
+        upload(postText, base64);
+        setPostText("");
+        setSelectedImage(null);
+      });
+    } else {
+      upload(postText);
+      setPostText("");
+      setSelectedImage(null);
+    }
+  }, [
+    upload,
+    postText,
+    selectedImage,
+    setPostText,
+    setSelectedImage,
+    isLoading,
+    toast,
+  ]);
 
   const removeImage = useCallback(() => {
     setSelectedImage(null);
@@ -79,6 +111,8 @@ export const CreatePost = ({
           className="w-full p-2 border border-slate-200 rounded-md dark:border-slate-800"
           placeholder="What's on your mind?"
           rows={3}
+          value={postText}
+          onChange={(e) => setPostText(e.target.value)}
         />
         <div
           className={`mt-2 border-2 border-dashed rounded-md p-4 text-center cursor-pointer drop-image ${
@@ -124,7 +158,7 @@ export const CreatePost = ({
           )}
         </div>
         <div className="mt-2 flex justify-end">
-          <Button className="">Post</Button>
+          <Button onClick={onUpload}>Post</Button>
         </div>
       </CardContent>
     </Card>
