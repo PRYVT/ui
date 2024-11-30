@@ -158,7 +158,9 @@ export const CreatePost = ({
           )}
         </div>
         <div className="mt-2 flex justify-end">
-          <Button onClick={onUpload}>Post</Button>
+          <Button onClick={onUpload} disabled={isLoading}>
+            {isLoading ? "Posting..." : "Post"}
+          </Button>
         </div>
       </CardContent>
     </Card>
