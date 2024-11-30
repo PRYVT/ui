@@ -1,3 +1,4 @@
+import { useInterval } from "@/hooks/useInterval";
 import { getAllPosts } from "@/statemanagement/posting/postSlice";
 import { useAppDispatch, useAppSelector } from "@/statemanagement/store";
 import { EnhancedPost } from "@/types/enhanced_post.type";
@@ -26,6 +27,10 @@ export const PostList = () => {
   useEffect(() => {
     dispatch(getAllPosts());
   }, []);
+
+  useInterval(() => {
+    dispatch(getAllPosts());
+  }, 1000); // Fetch posts every second
 
   return (
     <>

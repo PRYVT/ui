@@ -45,7 +45,7 @@ function App() {
   return (
     <>
       <ThemeProvider defaultTheme="dark">
-        <div className="bg-background">
+        <div className="bg-background dark:bg-background">
           <div className="flex flex-col min-h-screen">
             {isLoading && <LoginLoadingPage />}
             {!isLoading && (

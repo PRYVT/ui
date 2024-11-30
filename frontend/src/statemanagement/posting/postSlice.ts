@@ -1,7 +1,7 @@
 import { Post } from "@/types/post.type";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
 import { v4 as uuidv4 } from "uuid";
-
 export interface PostState {
   posts: Post[];
   postsLoading: boolean;
@@ -37,10 +37,13 @@ export const addPost = createAsyncThunk(
   "posts/add",
   async (payload: { text?: string; imageBase64?: string }) => {
     let token = window.sessionStorage.getItem("token");
+    const tokenDec = jwtDecode(token!);
     const post = {
       id: uuidv4(),
       text: payload.text,
       image_base64: payload.imageBase64,
+      user_id: tokenDec.sub,
+      change_date: new Date().toISOString(),
     } as Post;
     const response = await fetch(
       "https://" + window.envUrl + "/api/v1/posting/command/posts/",

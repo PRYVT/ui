@@ -21,7 +21,7 @@ export const SidePanel = ({
       {ownUserLoading && <SkeletonUserProfileEdit />}
       {!ownUserLoading && ownUser && <UserProfileEditPanel user={ownUser} />}
       <div className="rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">Suggested Connections</h2>
+        <h2 className="text-lg font-semibold mb-4">Other Users</h2>
         <ul className="space-y-4">
           {!usersLoading && users.map((user) => <SuggestedUser user={user} />)}
           {usersLoading && [1, 2, 3].map(() => <SkeletonSuggestedUser />)}
