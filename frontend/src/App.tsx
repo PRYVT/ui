@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useMemo } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ThemeProvider } from "./components/theming/themeprovider";
+import { Toaster } from "./components/ui/toaster";
 import { Login } from "./pages/login";
 import { LoginLoadingPage } from "./pages/login_loading";
 import { Main } from "./pages/main";
@@ -55,6 +56,7 @@ function App() {
             )}
           </div>
         </div>
+        <Toaster />
       </ThemeProvider>
     </>
   );

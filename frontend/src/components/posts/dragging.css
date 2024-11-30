@@ -1,0 +1,3 @@
+.drop-image * {
+  pointer-events: none;
+}
