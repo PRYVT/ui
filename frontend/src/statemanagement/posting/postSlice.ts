@@ -62,10 +62,14 @@ export const addPost = createAsyncThunk(
   }
 );
 
-export const usersSlice = createSlice({
+export const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    addPostSync: (state, action) => {
+      state.posts.unshift(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllPosts.pending, (state) => {
       state.postsLoading = true;
@@ -84,11 +88,12 @@ export const usersSlice = createSlice({
       state.postSending = false;
       console.log(err);
     });
-    builder.addCase(addPost.fulfilled, (state, action) => {
+    builder.addCase(addPost.fulfilled, (state) => {
       state.postSending = false;
-      state.posts.unshift(action.payload);
     });
   },
 });
 
-export default usersSlice.reducer;
+export const { addPostSync } = postSlice.actions;
+
+export default postSlice.reducer;
