@@ -1,14 +1,19 @@
 import { Header } from "@/components/header/header";
-import { SocialNetworkLayout } from "@/components/social-network-layout";
+import { MainPage } from "@/pages/subpages/Main";
 import { WebsocketProvider } from "@/websocket/websocketProvider";
+import { Route, Routes } from "react-router-dom";
+import { ChatsPage } from "./subpages/Chats";
 
 export const Main = () => {
   return (
     <WebsocketProvider>
       <Header />
-      <main className="flex-1">
-        <div className="container mx-auto px-4 py-8">
-          <SocialNetworkLayout />
+      <main className="flex-1 flex">
+        <div className="container mx-auto bg-white shadow-lg rounded-lg p-6 flex flex-col">
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="chats" element={<ChatsPage />} />
+          </Routes>
         </div>
       </main>
     </WebsocketProvider>

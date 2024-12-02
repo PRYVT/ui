@@ -7,6 +7,7 @@ import {
 } from "@/lib/utils";
 import { useAppSelector } from "@/statemanagement/store";
 import { Bell, Home, Mail, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ModeToggle } from "../theming/themetoggle";
 export const Header = () => {
   const user = useAppSelector((state) => state.users.ownUser);
@@ -18,18 +19,22 @@ export const Header = () => {
             PRYVT
           </h1>
           <nav className="hidden md:flex space-x-4">
-            <Button variant="ghost" size="sm">
-              <Home className="h-4 w-4 mr-2" />
-              Home
-            </Button>
+            <Link to="/">
+              <Button variant="ghost" size="sm">
+                <Home className="h-4 w-4 mr-2" />
+                Home
+              </Button>
+            </Link>
             <Button variant="ghost" size="sm" disabled>
               <Users className="h-4 w-4 mr-2" />
               Network
             </Button>
-            <Button variant="ghost" size="sm" disabled>
-              <Mail className="h-4 w-4 mr-2" />
-              Messages
-            </Button>
+            <Link to="/chats">
+              <Button variant="ghost" size="sm">
+                <Mail className="h-4 w-4 mr-2" />
+                Messages
+              </Button>
+            </Link>
           </nav>
         </div>
         <div className="flex items-center space-x-4">

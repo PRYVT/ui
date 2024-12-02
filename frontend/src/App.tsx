@@ -51,7 +51,7 @@ function App() {
             {!isLoading && (
               <Routes>
                 <Route path="/login" Component={Login} />
-                <Route path="/" Component={Main} />
+                <Route path="/*" Component={Main} />
               </Routes>
             )}
           </div>
