@@ -113,6 +113,9 @@ export const CreatePost = ({
           rows={3}
           value={postText}
           onChange={(e) => setPostText(e.target.value)}
+          onKeyUp={(e) => {
+            e.key === "Enter" && e.ctrlKey && onUpload();
+          }}
         />
         <div
           className={`mt-2 border-2 border-dashed rounded-md p-4 text-center cursor-pointer drop-image ${
