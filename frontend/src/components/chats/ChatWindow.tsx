@@ -59,8 +59,8 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50">
-      <div className="bg-white border-b border-gray-200 p-4 flex items-center space-x-4">
+    <div className="flex-1 flex flex-col">
+      <div className="border-b border-gray-200 dark:border-slate-800 p-4 flex items-center space-x-4">
         <Avatar>
           <AvatarImage
             src="/placeholder.svg?height=40&width=40"
@@ -69,7 +69,9 @@ export default function ChatWindow() {
           <AvatarFallback>AJ</AvatarFallback>
         </Avatar>
         <div>
-          <h2 className="text-lg font-semibold">Alice Johnson</h2>
+          <h2 className="text-black dark:text-white text-lg font-semibold">
+            Alice Johnson
+          </h2>
           <p className="text-sm text-gray-500">Online</p>
         </div>
       </div>
@@ -84,7 +86,7 @@ export default function ChatWindow() {
             <div
               className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-4 py-2 rounded-lg ${
                 message.sender === "user"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-slate-800 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
             >
@@ -100,7 +102,7 @@ export default function ChatWindow() {
           </div>
         ))}
       </div>
-      <div className="bg-white border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 dark:border-slate-800 p-4">
         <div className="flex space-x-2">
           <Input
             type="text"

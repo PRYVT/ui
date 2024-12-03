@@ -9,7 +9,7 @@ export const Main = () => {
     <WebsocketProvider>
       <Header />
       <main className="flex-1 flex">
-        <div className="container mx-auto bg-white shadow-lg rounded-lg p-6 flex flex-col">
+        <div className="container mx-auto shadow-lg rounded-lg p-6 flex flex-col">
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="chats" element={<ChatsPage />} />
