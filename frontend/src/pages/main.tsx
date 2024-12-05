@@ -1,10 +1,19 @@
 import { Header } from "@/components/header/header";
 import { MainPage } from "@/pages/subpages/Main";
+import { getAllChats } from "@/statemanagement/chats/chatSlice";
+import { getAllPosts } from "@/statemanagement/posting/postSlice";
+import { useAppDispatch } from "@/statemanagement/store";
 import { WebsocketProvider } from "@/websocket/websocketProvider";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ChatsPage } from "./subpages/Chats";
 
 export const Main = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getAllPosts());
+    dispatch(getAllChats());
+  }, []);
   return (
     <WebsocketProvider>
       <Header />

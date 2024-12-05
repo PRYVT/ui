@@ -16,7 +16,7 @@ interface ChatItemProps {
   unread: number;
 }
 
-export default function ChatItem({
+export default function ChatRooms({
   name,
   lastMessage,
   avatar,

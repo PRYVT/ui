@@ -1,35 +1,26 @@
-import ChatItem from "./ChatItem";
-
-const chats = [
-  {
-    id: 1,
-    name: "Alice Johnsonn",
-    lastMessage: "Hey, how are you doing?",
-    avatar: {
-      image: "/placeholder.svg?height=40&width=40",
-      fallbackColorGen: "Alice Johnsonn",
-    },
-    timestamp: "5m ago",
-    unread: 2,
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    lastMessage: "Did you see the latest post?",
-    avatar: {
-      image: "/placeholder.svg?height=40&width=40",
-      fallbackColorGen: "Bob Smith",
-    },
-    timestamp: "1h ago",
-    unread: 0,
-  },
-];
+import { useAppSelector } from "@/statemanagement/store";
+import ChatRooms from "./ChatItem";
 
 export default function ChatList() {
+  const chats = useAppSelector((state) => {
+    const chats = state.chats.chats;
+    return chats.map((chat) => {
+      return {
+        id: chat.id,
+        name: chat.name,
+        lastMessage: "",
+        avatar: {
+          fallbackColorGen: chat.id,
+        },
+        timestamp: "",
+        unread: 0,
+      };
+    });
+  });
   return (
     <div>
       {chats.map((chat) => (
-        <ChatItem key={chat.id} {...chat} />
+        <ChatRooms key={chat.id} {...chat} />
       ))}
     </div>
   );
