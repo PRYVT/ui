@@ -4,6 +4,7 @@ export interface ChatState {
   chats: ChatRoom[];
   chatsLoading: boolean;
   messageSending: boolean;
+  activeChatId?: string;
 }
 
 const initialState: ChatState = {

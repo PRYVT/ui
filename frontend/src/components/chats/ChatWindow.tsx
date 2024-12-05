@@ -3,57 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface Message {
-  id: number;
+  id: string;
   content: string;
-  sender: "user" | "other";
+  ownMessage: boolean;
   timestamp: string;
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    content: "Hey there! How's it going?",
-    sender: "other",
-    timestamp: "10:00 AM",
-  },
-  {
-    id: 2,
-    content: "Hi! I'm doing well, thanks. How about you?",
-    sender: "user",
-    timestamp: "10:02 AM",
-  },
-  {
-    id: 3,
-    content: "I'm great! Just working on some new features for our app.",
-    sender: "other",
-    timestamp: "10:05 AM",
-  },
-  {
-    id: 4,
-    content: "That sounds exciting! Can't wait to see what you come up with.",
-    sender: "user",
-    timestamp: "10:07 AM",
-  },
-];
-
-export default function ChatWindow() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+export default function ChatWindow({ messages }: { messages: Message[] }) {
   const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
       const message: Message = {
-        id: messages.length + 1,
+        id: uuidv4(),
         content: newMessage,
-        sender: "user",
+        ownMessage: true,
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
-      setMessages([...messages, message]);
+      console.log(message);
       setNewMessage("");
     }
   };
@@ -80,12 +53,12 @@ export default function ChatWindow() {
           <div
             key={message.id}
             className={`flex ${
-              message.sender === "user" ? "justify-end" : "justify-start"
+              message.ownMessage ? "justify-end" : "justify-start"
             }`}
           >
             <div
               className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl px-4 py-2 rounded-lg ${
-                message.sender === "user"
+                message.ownMessage
                   ? "bg-slate-800 text-white"
                   : "bg-gray-200 text-gray-800"
               }`}
@@ -93,7 +66,7 @@ export default function ChatWindow() {
               <p>{message.content}</p>
               <p
                 className={`text-xs mt-1 ${
-                  message.sender === "user" ? "text-blue-100" : "text-gray-500"
+                  message.ownMessage ? "text-blue-100" : "text-gray-500"
                 }`}
               >
                 {message.timestamp}

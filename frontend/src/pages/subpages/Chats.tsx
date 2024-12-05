@@ -1,5 +1,5 @@
 import ChatSidebar from "@/components/chats/ChatSidebar";
-import ChatWindow from "@/components/chats/ChatWindow";
+import ChatWindowWrapper from "@/components/chats/ChatWindow_wrapper";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const ChatsPage = () => {
@@ -8,7 +8,7 @@ export const ChatsPage = () => {
       <CardContent className="pb-0 flex flex-col flex-1">
         <div className="flex-1 flex overflow-hidden">
           <ChatSidebar />
-          <ChatWindow />
+          <ChatWindowWrapper />
         </div>
       </CardContent>
     </Card>
