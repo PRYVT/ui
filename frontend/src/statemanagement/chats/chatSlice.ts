@@ -19,7 +19,6 @@ const initialState: ChatState = {
 
 const setMessagesForChat = (
   chat: ChatRoomWithNotifications,
-  activeChatId?: string,
   messagesToAdd?: ChatMessage[]
 ) => {
   const { messages, noNewMessages } = createUniqueMessages(
@@ -129,11 +128,7 @@ export const chatSlice = createSlice({
     updateChatRoomMessagesSync: (state, action: { payload: ChatRoom }) => {
       const chatRoom = state.chats.find((x) => x.id == action.payload.id);
       if (chatRoom != null) {
-        setMessagesForChat(
-          chatRoom,
-          state.activeChatId,
-          action.payload.messages
-        );
+        setMessagesForChat(chatRoom, action.payload.messages);
       } else {
         state.chats.push({ ...action.payload, unreadMessages: 1 });
       }
@@ -165,7 +160,7 @@ export const chatSlice = createSlice({
         state.chatIsLoading = false;
         const chat = state.chats.find((x) => x.id == action.payload.chatId);
         if (chat != null) {
-          setMessagesForChat(chat, state.activeChatId, action.payload.messages);
+          setMessagesForChat(chat, action.payload.messages);
         }
       }
     );
