@@ -15,11 +15,11 @@ export const Main = () => {
   usePostWebsocket();
   useChatWebsocket();
   useEffect(() => {
-    dispatch(getAllPosts());
-    dispatch(getAllChats());
     dispatch(getOwnUser());
     dispatch(getAllUsers());
-  }, []);
+    dispatch(getAllPosts());
+    dispatch(getAllChats());
+  }, [dispatch]);
 
   return (
     <>
