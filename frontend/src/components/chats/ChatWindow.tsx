@@ -47,7 +47,10 @@ export default function ChatWindow({
       <div className="border-b border-gray-200 dark:border-slate-800 p-4 flex items-center space-x-4">
         <Avatar>
           <AvatarFallback
-            className={randomTailwindBackgroundColor(withUser.id)}
+            className={
+              "text-white font-semibold " +
+              randomTailwindBackgroundColor(withUser.id)
+            }
           >
             {chooseTwoCharsFromName(withUser.display_name)}
           </AvatarFallback>
@@ -56,7 +59,7 @@ export default function ChatWindow({
           <h2 className="text-black dark:text-white text-lg font-semibold">
             {withUser.display_name}
           </h2>
-          <p className="text-sm text-gray-500">Online</p>
+          <p className="text-sm text-gray-500">Unkown Status</p>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4">

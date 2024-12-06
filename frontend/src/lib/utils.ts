@@ -25,7 +25,7 @@ export function randomTailwindBackgroundColor(uniqueValue: string) {
 
 export function chooseTwoCharsFromName(name: string) {
   const [first, second] = name.split(" ");
-  if (!first || !second) {
+  if (!first) {
     return "";
   }
   if (second) {
