@@ -6,6 +6,7 @@ import {
 } from "@/lib/utils";
 
 interface ChatItemProps {
+  id: string;
   name: string;
   lastMessage: string;
   avatar: {
@@ -14,6 +15,7 @@ interface ChatItemProps {
   };
   timestamp: string;
   unread: number;
+  onClick: (chatId: string) => void;
 }
 
 export default function ChatRooms({
@@ -22,9 +24,16 @@ export default function ChatRooms({
   avatar,
   timestamp,
   unread,
+  id,
+  onClick,
 }: ChatItemProps) {
   return (
-    <div className="flex items-center space-x-4 p-4 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer">
+    <div
+      className="flex items-center space-x-4 p-4 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer"
+      onClick={() => {
+        onClick(id);
+      }}
+    >
       <Avatar>
         {avatar.image && <AvatarImage src={avatar.image} alt={name} />}
         <AvatarFallback

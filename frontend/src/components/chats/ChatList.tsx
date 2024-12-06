@@ -1,7 +1,11 @@
 import { useAppSelector } from "@/statemanagement/store";
 import ChatRooms from "./ChatItem";
 
-export default function ChatList() {
+export default function ChatList({
+  setChatId,
+}: {
+  setChatId: (chatId: string) => void;
+}) {
   const chats = useAppSelector((state) => {
     const chats = state.chats.chats;
     return chats.map((chat) => {
@@ -20,7 +24,7 @@ export default function ChatList() {
   return (
     <div>
       {chats.map((chat) => (
-        <ChatRooms key={chat.id} {...chat} />
+        <ChatRooms key={chat.id} {...chat} onClick={setChatId} />
       ))}
     </div>
   );
