@@ -7,7 +7,7 @@ import {
 } from "@/lib/utils";
 import { User } from "@/types/user.type";
 import { Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Message {
   id: string;
@@ -26,6 +26,11 @@ export default function ChatWindow({
   onMessageSend: (message: { text: string }) => void;
 }) {
   const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    console.log(messagesEndRef.current);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -57,7 +62,7 @@ export default function ChatWindow({
           <p className="text-sm text-gray-500">Unkown Status</p>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-265px)]">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -83,6 +88,7 @@ export default function ChatWindow({
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className="border-t border-gray-200 dark:border-slate-800 p-4">
         <div className="flex space-x-2">
