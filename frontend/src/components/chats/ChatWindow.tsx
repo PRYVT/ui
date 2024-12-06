@@ -1,6 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  chooseTwoCharsFromName,
+  randomTailwindBackgroundColor,
+} from "@/lib/utils";
+import { User } from "@/types/user.type";
 import { Send } from "lucide-react";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +17,13 @@ interface Message {
   timestamp: string;
 }
 
-export default function ChatWindow({ messages }: { messages: Message[] }) {
+export default function ChatWindow({
+  withUser,
+  messages,
+}: {
+  withUser: User;
+  messages: Message[];
+}) {
   const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
@@ -35,15 +46,15 @@ export default function ChatWindow({ messages }: { messages: Message[] }) {
     <div className="flex-1 flex flex-col">
       <div className="border-b border-gray-200 dark:border-slate-800 p-4 flex items-center space-x-4">
         <Avatar>
-          <AvatarImage
-            src="/placeholder.svg?height=40&width=40"
-            alt="Alice Johnson"
-          />
-          <AvatarFallback>AJ</AvatarFallback>
+          <AvatarFallback
+            className={randomTailwindBackgroundColor(withUser.id)}
+          >
+            {chooseTwoCharsFromName(withUser.display_name)}
+          </AvatarFallback>
         </Avatar>
         <div>
           <h2 className="text-black dark:text-white text-lg font-semibold">
-            Alice Johnson
+            {withUser.display_name}
           </h2>
           <p className="text-sm text-gray-500">Online</p>
         </div>

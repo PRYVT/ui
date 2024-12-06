@@ -3,6 +3,7 @@ import { MainPage } from "@/pages/subpages/Main";
 import { getAllChats } from "@/statemanagement/chats/chatSlice";
 import { getAllPosts } from "@/statemanagement/posting/postSlice";
 import { useAppDispatch } from "@/statemanagement/store";
+import { getAllUsers, getOwnUser } from "@/statemanagement/users/usersSlice";
 import { WebsocketProvider } from "@/websocket/websocketProvider";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -13,6 +14,8 @@ export const Main = () => {
   useEffect(() => {
     dispatch(getAllPosts());
     dispatch(getAllChats());
+    dispatch(getOwnUser());
+    dispatch(getAllUsers());
   }, []);
   return (
     <WebsocketProvider>
