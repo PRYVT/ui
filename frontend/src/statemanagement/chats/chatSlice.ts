@@ -1,5 +1,6 @@
 import { ChatMessage } from "@/types/chatmessage.type";
 import { ChatRoom } from "@/types/chatroom.type";
+import { unique } from "@/utils/unique_array";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export interface ChatState {
   chats: ChatRoom[];
@@ -41,6 +42,7 @@ export const getAllChats = createAsyncThunk("chats/getAll", async (_, s) => {
 export const getChatById = createAsyncThunk(
   "chats/getById",
   async ({ chatId }: { chatId: string }, t) => {
+    console.log(chatId);
     let token = window.sessionStorage.getItem("token");
 
     const activeChatId = (t.getState() as { chats: ChatState }).chats
@@ -69,30 +71,29 @@ export const getChatById = createAsyncThunk(
 
 export const addMessage = createAsyncThunk(
   "chats/add",
-  async (payload: { text?: string; imageBase64?: string }) => {
-    /*let token = window.sessionStorage.getItem("token");
-    const tokenDec = jwtDecode(token!);
+  async (payload: { text?: string; imageBase64?: string }, t) => {
+    let token = window.sessionStorage.getItem("token");
+    const activeChatId = (t.getState() as { chats: ChatState }).chats
+      .activeChatId;
     const chat = {
-      id: uuidv4(),
       text: payload.text,
-      image_base64: payload.imageBase64,
-      user_id: tokenDec.sub,
-      change_date: new Date().toISOString(),
-    } as ChatRoom;
+    };
     const response = await fetch(
-      "https://" + window.envUrl + "/api/v1/chats/command/chats/",
+      "https://" +
+        window.envUrl +
+        `/api/v1/chats/command/chats/${activeChatId}/message`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(chat),
-        method: "Chat",
+        method: "POST",
       }
     );
     if (response.status > 299) {
       throw new Error("Request failed with " + response.status);
     }
-    return chat;*/
+    return chat;
   }
 );
 
@@ -134,7 +135,10 @@ export const chatSlice = createSlice({
         const chat = state.chats.find((x) => x.id == action.payload.chatId);
         if (chat != null) {
           const prevMessages = chat.messages ?? [];
-          chat.messages = [...prevMessages, ...action.payload.messages];
+          chat.messages = unique(
+            [...prevMessages, ...action.payload.messages],
+            (x) => x.id
+          );
         }
       }
     );

@@ -8,7 +8,6 @@ import {
 import { User } from "@/types/user.type";
 import { Send } from "lucide-react";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 interface Message {
   id: string;
@@ -20,24 +19,20 @@ interface Message {
 export default function ChatWindow({
   withUser,
   messages,
+  onMessageSend,
 }: {
   withUser: User;
   messages: Message[];
+  onMessageSend: (message: { text: string }) => void;
 }) {
   const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      const message: Message = {
-        id: uuidv4(),
-        content: newMessage,
-        ownMessage: true,
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+      const message = {
+        text: newMessage,
       };
-      console.log(message);
+      onMessageSend(message);
       setNewMessage("");
     }
   };
@@ -96,7 +91,7 @@ export default function ChatWindow({
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+            onKeyUp={(e) => e.key === "Enter" && handleSendMessage()}
             className="flex-1"
           />
           <Button onClick={handleSendMessage}>

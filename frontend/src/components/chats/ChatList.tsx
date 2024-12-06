@@ -1,11 +1,16 @@
-import { useAppSelector } from "@/statemanagement/store";
+import { getChatById } from "@/statemanagement/chats/chatSlice";
+import { useAppDispatch, useAppSelector } from "@/statemanagement/store";
+import { useCallback } from "react";
 import ChatRooms from "./ChatItem";
 
-export default function ChatList({
-  setChatId,
-}: {
-  setChatId: (chatId: string) => void;
-}) {
+export default function ChatList() {
+  const dispatch = useAppDispatch();
+  const setChatId = useCallback(
+    (chatId: string) => {
+      dispatch(getChatById({ chatId }));
+    },
+    [dispatch]
+  );
   const chats = useAppSelector((state) => {
     const chats = state.chats.chats;
     return chats.map((chat) => {
