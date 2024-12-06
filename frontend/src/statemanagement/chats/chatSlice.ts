@@ -1,9 +1,9 @@
 import { ChatMessage } from "@/types/chatmessage.type";
-import { ChatRoom } from "@/types/chatroom.type";
-import { unique } from "@/utils/unique_array";
+import { ChatRoom, ChatRoomWithNotifications } from "@/types/chatroom.type";
+import { createUniqueMessages } from "@/utils/unreadMessages";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export interface ChatState {
-  chats: ChatRoom[];
+  chats: ChatRoomWithNotifications[];
   chatsAreLoading: boolean;
   chatIsLoading: boolean;
   messageSending: boolean;
@@ -15,6 +15,21 @@ const initialState: ChatState = {
   chatsAreLoading: false,
   chatIsLoading: false,
   messageSending: false,
+};
+
+const setMessagesForChat = (
+  chat: ChatRoomWithNotifications,
+  activeChatId?: string,
+  messagesToAdd?: ChatMessage[]
+) => {
+  const { messages, noNewMessages } = createUniqueMessages(
+    chat.messages,
+    messagesToAdd
+  );
+  chat.messages = messages;
+  if (activeChatId != chat.id) {
+    chat.unreadMessages = noNewMessages;
+  }
 };
 
 export const getAllChats = createAsyncThunk("chats/getAll", async (_, s) => {
@@ -30,8 +45,10 @@ export const getAllChats = createAsyncThunk("chats/getAll", async (_, s) => {
   if (response.status > 299) {
     throw new Error("Request failed with " + response.status);
   }
-  const data = await response.json();
-  console.log(data);
+  const data = (await response.json()) as ChatRoomWithNotifications[];
+  data.forEach((chat) => {
+    chat.unreadMessages = 0;
+  });
   if (data.length > 0) {
     s.dispatch(getChatById({ chatId: data[0].id }));
   }
@@ -103,16 +120,21 @@ export const chatSlice = createSlice({
   reducers: {
     setActiveChatId: (state, action: { payload: string }) => {
       state.activeChatId = action.payload;
+      const chat = state.chats.find((x) => x.id == action.payload);
+      if (chat != null) {
+        chat.unreadMessages = 0;
+      }
     },
     updateChatRoomMessagesSync: (state, action: { payload: ChatRoom }) => {
       const chatRoom = state.chats.find((x) => x.id == action.payload.id);
       if (chatRoom != null) {
-        chatRoom.messages = unique(
-          [...(chatRoom.messages ?? []), ...(action.payload.messages ?? [])],
-          (x) => x.id
+        setMessagesForChat(
+          chatRoom,
+          state.activeChatId,
+          action.payload.messages
         );
       } else {
-        state.chats.push(action.payload);
+        state.chats.push({ ...action.payload, unreadMessages: 1 });
       }
     },
   },
@@ -142,11 +164,7 @@ export const chatSlice = createSlice({
         state.chatIsLoading = false;
         const chat = state.chats.find((x) => x.id == action.payload.chatId);
         if (chat != null) {
-          const prevMessages = chat.messages ?? [];
-          chat.messages = unique(
-            [...prevMessages, ...action.payload.messages],
-            (x) => x.id
-          );
+          setMessagesForChat(chat, state.activeChatId, action.payload.messages);
         }
       }
     );

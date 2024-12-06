@@ -22,7 +22,7 @@ export default function ChatList() {
           fallbackColorGen: chat.id,
         },
         timestamp: "",
-        unread: 0,
+        unread: chat.unreadMessages ?? 0,
       };
     });
   });

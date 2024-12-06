@@ -54,14 +54,7 @@ export default function ChatRooms({
         </div>
         <p className="text-sm text-gray-500 truncate">{lastMessage}</p>
       </div>
-      {unread > 0 && (
-        <Badge
-          className="rounded-full px-2 py-1"
-          style={{ width: 23, height: 23 }}
-        >
-          {unread}
-        </Badge>
-      )}
+      {unread > 0 && <Badge className="rounded-full px-2 py-1">new</Badge>}
     </div>
   );
 }

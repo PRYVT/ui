@@ -7,3 +7,7 @@ export interface ChatRoom {
   messages?: ChatMessage[];
   isLoading?: boolean;
 }
+
+export interface ChatRoomWithNotifications extends ChatRoom {
+  unreadMessages?: number;
+}
