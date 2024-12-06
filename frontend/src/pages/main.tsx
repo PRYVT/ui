@@ -4,13 +4,16 @@ import { getAllChats } from "@/statemanagement/chats/chatSlice";
 import { getAllPosts } from "@/statemanagement/posting/postSlice";
 import { useAppDispatch } from "@/statemanagement/store";
 import { getAllUsers, getOwnUser } from "@/statemanagement/users/usersSlice";
-import { WebsocketProvider } from "@/websocket/websocketProvider";
+import { useChatWebsocket } from "@/websocket/chatWebsocket";
+import { usePostWebsocket } from "@/websocket/postWebsocket";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ChatsPage } from "./subpages/Chats";
 
 export const Main = () => {
   const dispatch = useAppDispatch();
+  usePostWebsocket();
+  useChatWebsocket();
   useEffect(() => {
     dispatch(getAllPosts());
     dispatch(getAllChats());
@@ -18,7 +21,7 @@ export const Main = () => {
     dispatch(getAllUsers());
   }, []);
   return (
-    <WebsocketProvider>
+    <>
       <Header />
       <main className="flex-1 flex">
         <div className="container mx-auto shadow-lg rounded-lg p-6 flex flex-col">
@@ -28,6 +31,6 @@ export const Main = () => {
           </Routes>
         </div>
       </main>
-    </WebsocketProvider>
+    </>
   );
 };

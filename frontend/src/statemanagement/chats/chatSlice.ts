@@ -101,11 +101,19 @@ export const chatSlice = createSlice({
   name: "chats",
   initialState,
   reducers: {
-    addChatSync: (state, action) => {
-      state.chats.unshift(action.payload);
-    },
     setActiveChatId: (state, action: { payload: string }) => {
       state.activeChatId = action.payload;
+    },
+    updateChatRoomMessagesSync: (state, action: { payload: ChatRoom }) => {
+      const chatRoom = state.chats.find((x) => x.id == action.payload.id);
+      if (chatRoom != null) {
+        chatRoom.messages = unique(
+          [...(chatRoom.messages ?? []), ...(action.payload.messages ?? [])],
+          (x) => x.id
+        );
+      } else {
+        state.chats.push(action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -155,6 +163,7 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { addChatSync, setActiveChatId } = chatSlice.actions;
+export const { updateChatRoomMessagesSync, setActiveChatId } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;
