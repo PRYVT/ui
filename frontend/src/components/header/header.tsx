@@ -81,7 +81,7 @@ export const Header = () => {
                 <CardContent>
                   <div className="grid gap-4">
                     <div className="grid gap-2">
-                      <div className="flex items-start gap-4 rounded-lg p-2 hover:bg-gray-100">
+                      <div className="flex items-start gap-4 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-slate-700">
                         <Avatar className="h-9 w-9">
                           <AvatarImage
                             src="/placeholder-avatar.jpg"
