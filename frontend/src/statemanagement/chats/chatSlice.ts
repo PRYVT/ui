@@ -27,9 +27,7 @@ const setMessagesForChat = (
     messagesToAdd
   );
   chat.messages = messages;
-  if (activeChatId != chat.id) {
-    chat.unreadMessages = noNewMessages;
-  }
+  chat.unreadMessages = noNewMessages;
 };
 
 export const getAllChats = createAsyncThunk("chats/getAll", async (_, s) => {
@@ -82,6 +80,7 @@ export const getChatById = createAsyncThunk(
     }
     const data = await response.json();
     console.log(data);
+
     return { messages: data.messages, chatId };
   }
 );
@@ -120,7 +119,9 @@ export const chatSlice = createSlice({
   reducers: {
     setActiveChatId: (state, action: { payload: string }) => {
       state.activeChatId = action.payload;
-      const chat = state.chats.find((x) => x.id == action.payload);
+    },
+    setReadMessages: (state) => {
+      const chat = state.chats.find((x) => x.id == state.activeChatId);
       if (chat != null) {
         chat.unreadMessages = 0;
       }
@@ -181,7 +182,7 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { updateChatRoomMessagesSync, setActiveChatId } =
+export const { updateChatRoomMessagesSync, setActiveChatId, setReadMessages } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

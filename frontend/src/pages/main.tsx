@@ -20,6 +20,7 @@ export const Main = () => {
     dispatch(getOwnUser());
     dispatch(getAllUsers());
   }, []);
+
   return (
     <>
       <Header />

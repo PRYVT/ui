@@ -1,5 +1,6 @@
-import { addMessage } from "@/statemanagement/chats/chatSlice";
+import { addMessage, setReadMessages } from "@/statemanagement/chats/chatSlice";
 import { useAppDispatch, useAppSelector } from "@/statemanagement/store";
+import { useEffect } from "react";
 import ChatWindow from "./ChatWindow";
 
 export default function ChatWindowWrapper() {
@@ -23,6 +24,9 @@ export default function ChatWindowWrapper() {
         }) ?? null,
     };
   });
+  useEffect(() => {
+    dispatch(setReadMessages());
+  }, [chatMessages]);
   return (
     <ChatWindow
       withUser={withUser || { display_name: "", id: "" }}
