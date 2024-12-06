@@ -1,7 +1,5 @@
-import { getAllPosts } from "@/statemanagement/posting/postSlice";
-import { useAppDispatch, useAppSelector } from "@/statemanagement/store";
+import { useAppSelector } from "@/statemanagement/store";
 import { EnhancedPost } from "@/types/enhanced_post.type";
-import { useEffect } from "react";
 import { ContentCard } from "./contentcard";
 
 export const PostList = () => {
@@ -22,10 +20,6 @@ export const PostList = () => {
     });
     return enahncedPosts;
   });
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(getAllPosts());
-  }, []);
 
   return (
     <>

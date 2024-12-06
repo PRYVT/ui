@@ -1,45 +1,50 @@
-import { addPostSync } from "@/statemanagement/posting/postSlice";
-import { useAppDispatch, useAppSelector } from "@/statemanagement/store";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useAppSelector } from "@/statemanagement/store";
+import { useEffect } from "react";
 
-interface WebsocketProviderProps {
-  children: React.ReactNode;
-}
+export const useWebsocket = (
+  url: string,
+  listenToEvents: { eventName: string; onEvent: (data: unknown) => void }[]
+) => {
+  const token = useAppSelector((state) => state.authentication.token) || "";
 
-export const WebsocketProvider = ({ children }: WebsocketProviderProps) => {
-  const url = `ws://${window.envUrl}/api/v1/posting/query/ws`;
-  const token = useAppSelector((state) => state.authentication.token);
-  const dispatch = useAppDispatch();
-  const [newWebSocket, setNewWebSocket] = useState(0);
-  const ws = useMemo(() => {
-    return new WebSocket(url);
-  }, [newWebSocket]);
-
-  const onPost = useCallback(
-    (data: any) => {
-      console.log(data);
-      dispatch(addPostSync(data));
-    },
-    [ws, dispatch]
-  );
   useEffect(() => {
+    websocketInitializer(url, token, listenToEvents);
+  }, [url, token]);
+};
+
+const websocketInitializer = (
+  url: string,
+  token: string,
+  listenToEvents: { eventName: string; onEvent: (data: unknown) => void }[]
+) => {
+  const initWebsocket = () => {
+    const ws = new WebSocket(url);
+    let isReconnecting = false;
     ws.onmessage = (event) => {
-      onPost(JSON.parse(event.data));
+      listenToEvents.forEach((listenDef) => {
+        if (listenDef.eventName === "default") {
+          //todo add event name to the event
+          listenDef.onEvent(JSON.parse(event.data));
+        }
+      });
     };
     ws.onopen = () => {
       ws.send(JSON.stringify({ token: token, data: "" }));
     };
+    const reconnect = () => {
+      if (!isReconnecting) {
+        isReconnecting = true;
+        setTimeout(() => {
+          initWebsocket();
+        }, 500);
+      }
+    };
     ws.onclose = () => {
-      setTimeout(() => {
-        setNewWebSocket(newWebSocket + 1);
-      }, 500);
+      reconnect();
     };
     ws.onerror = () => {
-      setTimeout(() => {
-        setNewWebSocket(newWebSocket + 1);
-      }, 500);
+      reconnect();
     };
-  }, [ws, newWebSocket, onPost]);
-
-  return <>{children}</>;
+  };
+  initWebsocket();
 };
